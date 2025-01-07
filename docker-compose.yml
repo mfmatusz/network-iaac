@@ -1,0 +1,234 @@
+version: '3.8'
+
+networks:
+ # Gateway DMZ
+ gateway_dmz:
+   ipam:
+     config:
+       - subnet: 10.1.0.0/24
+
+ # Service X 
+ service_x:
+   ipam:
+     config:
+       - subnet: 10.2.0.0/24
+
+ # DMZ #2
+ dmz_2:
+   ipam:
+     config:
+       - subnet: 10.2.2.0/24
+
+ # Security Infrastructure
+ security:
+   ipam:
+     config:
+       - subnet: 10.2.1.0/24
+
+ # Green Server
+ green:
+   ipam:
+     config:
+       - subnet: 10.3.0.0/24
+
+ # Red Server
+ red:
+   ipam:
+     config:
+       - subnet: 10.4.0.0/24
+
+services:
+ # Main Firewall
+ main_firewall:
+   build: ./services/firewalls/main
+   cap_add:
+     - NET_ADMIN
+   networks:
+     gateway_dmz:
+       ipv4_address: 10.1.0.2
+     service_x:
+       ipv4_address: 10.2.0.2
+     green:
+       ipv4_address: 10.3.0.2
+     red:
+       ipv4_address: 10.4.0.2
+
+ # Gateway DMZ
+ gateway_firewall:
+   build: ./services/firewalls/gateway
+   cap_add:
+     - NET_ADMIN
+   networks:
+     gateway_dmz:
+       ipv4_address: 10.1.0.1
+
+ gateway_router:
+   build: ./services/routers/gateway
+   cap_add:
+     - NET_ADMIN
+   networks:
+     gateway_dmz:
+       ipv4_address: 10.1.0.10
+
+ gateway_nids:
+   build: ./services/nids/gateway
+   networks:
+     gateway_dmz:
+       ipv4_address: 10.1.0.20
+
+ dns:
+   build: ./services/dns
+   networks:
+     gateway_dmz:
+       ipv4_address: 10.1.0.30
+
+ # Service X
+ service_x_router:
+   build: ./services/routers/service_x
+   cap_add:
+     - NET_ADMIN
+   networks:
+     service_x:
+       ipv4_address: 10.2.0.1
+
+ service_x_nids:
+   build: ./services/nids/service_x
+   networks:
+     service_x:
+       ipv4_address: 10.2.0.10
+
+ # DMZ #2
+ dmz2_firewall:
+   build: ./services/firewalls/dmz2
+   cap_add:
+     - NET_ADMIN
+   networks:
+     dmz_2:
+       ipv4_address: 10.2.2.1
+
+ dmz2_nids:
+   build: ./services/nids/dmz2
+   networks:
+     dmz_2:
+       ipv4_address: 10.2.2.40
+
+ vpn_controller:
+   build: ./services/vpn_controller
+   networks:
+     dmz_2:
+       ipv4_address: 10.2.2.50
+
+ # Security Infrastructure
+ security_firewall:
+   build: ./services/firewalls/security
+   cap_add:
+     - NET_ADMIN
+   networks:
+     security:
+       ipv4_address: 10.2.1.1
+
+ security_nids:
+   build: ./services/nids/security
+   networks:
+     security:
+       ipv4_address: 10.2.1.40
+
+ edr:
+   build: ./services/security/edr
+   networks:
+     security:
+       ipv4_address: 10.2.1.10
+
+ siem:
+   build: ./services/security/siem
+   networks:
+     security:
+       ipv4_address: 10.2.1.30
+
+ log_collector:
+   build: ./services/security/log_collector
+   networks:
+     security:
+       ipv4_address: 10.2.1.20
+
+ security_host1:
+   build: ./services/hosts/security
+   networks:
+     security:
+       ipv4_address: 10.2.1.100
+
+ security_host2:
+   build: ./services/hosts/security
+   networks:
+     security:
+       ipv4_address: 10.2.1.101
+
+ # Green Server Host
+ green_firewall:
+   build: ./services/firewalls/green
+   cap_add:
+     - NET_ADMIN
+   networks:
+     green:
+       ipv4_address: 10.3.0.1
+
+ green_router:
+   build: ./services/routers/green
+   cap_add:
+     - NET_ADMIN
+   networks:
+     green:
+       ipv4_address: 10.3.0.10
+
+ green_nids:
+   build: ./services/nids/green
+   networks:
+     green:
+       ipv4_address: 10.3.0.40
+
+ green_host1:
+   build: ./services/hosts/green
+   networks:
+     green:
+       ipv4_address: 10.3.0.100
+
+ green_host2:
+   build: ./services/hosts/green
+   networks:
+     green:
+       ipv4_address: 10.3.0.101
+
+ # Red Server Host
+ red_firewall:
+   build: ./services/firewalls/red
+   cap_add:
+     - NET_ADMIN
+   networks:
+     red:
+       ipv4_address: 10.4.0.1
+
+ red_router:
+   build: ./services/routers/red
+   cap_add:
+     - NET_ADMIN
+   networks:
+     red:
+       ipv4_address: 10.4.0.10
+
+ red_nids:
+   build: ./services/nids/red
+   networks:
+     red:
+       ipv4_address: 10.4.0.40
+
+ red_host1:
+   build: ./services/hosts/red
+   networks:
+     red:
+       ipv4_address: 10.4.0.100
+
+ red_host2:
+   build: ./services/hosts/red
+   networks:
+     red:
+       ipv4_address: 10.4.0.101
