@@ -21,4 +21,9 @@
 -A FORWARD -s 10.2.1.0/24 -d 10.1.0.0/24 -p tcp --dport 1514 -j ACCEPT  # HIDS komunikacja
 -A FORWARD -s 10.2.1.0/24 -d 10.2.0.0/24 -p tcp --dport 1514 -j ACCEPT  # HIDS komunikacja
 
+# Dostęp do skanera podatności z zielonej strefy
+-A FORWARD -s 10.3.0.0/24 -d 10.2.0.50 -p tcp --dport 8834 -j ACCEPT  # Port Nessus UI
+
+-A FORWARD -s 10.4.0.0/24 -d 10.2.0.50 -p tcp --dport 8834 -j ACCEPT  # Port Nessus UI
+
 COMMIT
