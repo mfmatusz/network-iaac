@@ -1,0 +1,29 @@
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+
+# Internet -> DMZ (reguły z tabeli 2)
+-A FORWARD -i eth0 -o eth1 -p tcp --dport 443 -j ACCEPT  # HTTPS dla usług web
+-A FORWARD -i eth0 -o eth1 -p udp -m multiport --dports 500,4500 -j ACCEPT  # IPsec VPN
+-A FORWARD -i eth0 -o eth1 -p udp --dport 1194 -j ACCEPT  # OpenVPN
+-A FORWARD -i eth0 -j DROP  # Domyślna polityka dla ruchu z internetu
+
+# DMZ -> Internet
+-A FORWARD -i eth1 -o eth0 -j ACCEPT  # Ruch wychodzący
+
+# Logowanie
+-A FORWARD -j LOG --log-prefix "FIREWALL_DROP: "
+
+COMMIT
+
+*nat
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+
+# NAT dla ruchu wychodzącego
+-A POSTROUTING -o eth0 -j MASQUERADE
+
+COMMIT

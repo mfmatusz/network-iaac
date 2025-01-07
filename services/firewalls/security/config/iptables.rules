@@ -1,0 +1,13 @@
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+
+# Reguły z tabeli 8
+-A FORWARD -d 10.2.1.30 -p udp --dport 514 -j ACCEPT  # Syslog do SIEM
+-A FORWARD -s 10.3.0.0/24 -d 10.2.1.10 -p tcp --dport 8080 -j ACCEPT  # Wazuh agent
+-A FORWARD -s 10.0.0.0/8 -d 10.2.1.30 -p tcp --dport 5601 -j ACCEPT  # Kibana UI
+-A FORWARD -s 10.0.0.0/8 -d 10.2.1.30 -p tcp --dport 9200 -j ACCEPT  # Elasticsearch
+-A FORWARD -d 10.2.1.0/24 -j DROP  # Pozostały ruch
+
+COMMIT

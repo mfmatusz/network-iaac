@@ -1,3 +1,17 @@
 FROM ubuntu:20.04
-RUN apt-get update && apt-get install -y iptables net-tools iputils-ping iproute2
-CMD ["tail", "-f", "/dev/null"]
+
+RUN apt-get update && apt-get install -y \
+    iptables \
+    iproute2 \
+    net-tools \
+    iputils-ping \
+    tcpdump \
+    nftables \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY config/iptables.rules /etc/iptables/rules
+COPY entrypoint.sh /
+
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
