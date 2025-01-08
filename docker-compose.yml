@@ -45,13 +45,13 @@ services:
      - NET_ADMIN
    networks:
      gateway_dmz:
-       ipv4_address: 10.1.0.2
+       ipv4_address: 10.1.0.3
      service_x:
-       ipv4_address: 10.2.0.2
+       ipv4_address: 10.2.0.3
      green:
-       ipv4_address: 10.3.0.2
+       ipv4_address: 10.3.0.3
      red:
-       ipv4_address: 10.4.0.2
+       ipv4_address: 10.4.0.3
 
  # Gateway DMZ
  gateway_firewall:
@@ -60,7 +60,7 @@ services:
      - NET_ADMIN
    networks:
      gateway_dmz:
-       ipv4_address: 10.1.0.1
+       ipv4_address: 10.1.0.2
 
  gateway_router:
    build: ./services/routers/gateway
@@ -95,7 +95,7 @@ services:
      - NET_ADMIN
    networks:
      service_x:
-       ipv4_address: 10.2.0.1
+       ipv4_address: 10.2.0.2
 
  service_x_nids:
    build: ./services/nids/service_x
@@ -110,7 +110,7 @@ services:
      - NET_ADMIN
    networks:
      dmz_2:
-       ipv4_address: 10.2.2.1
+       ipv4_address: 10.2.2.2
 
 #  dmz2_nids:
 #    build: ./services/nids/dmz2
@@ -131,7 +131,7 @@ services:
      - NET_ADMIN
    networks:
      security:
-       ipv4_address: 10.2.1.1
+       ipv4_address: 10.2.1.2
 
 #  security_nids:
 #    build: ./services/nids/security
@@ -211,7 +211,7 @@ services:
      - NET_ADMIN
    networks:
      red:
-       ipv4_address: 10.4.0.1
+       ipv4_address: 10.4.0.2
 
 #  red_router:
 #    build: ./services/routers/red
