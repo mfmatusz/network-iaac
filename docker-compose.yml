@@ -85,7 +85,7 @@ services:
  service_x_dns:
    build: ./services/dns/service_x
    networks:
-     gateway_dmz:
+     service_x:
        ipv4_address: 10.2.0.30
 
  # Service X
@@ -242,6 +242,6 @@ services:
  vulnerability_scanner:
     build: ./services/vulnerability_scanner
     networks:
-      service_x:
+      security:
         ipv4_address: 10.2.1.50
     
