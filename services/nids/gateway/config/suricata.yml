@@ -1,0 +1,16 @@
+%YAML 1.1
+---
+vars:
+  address-groups:
+    HOME_NET: "[10.1.0.0/24]"
+    EXTERNAL_NET: "!$HOME_NET"
+
+default-rule-path: /etc/suricata/rules
+rule-files:
+ - suricata.rules
+
+af-packet:
+  - interface: eth0
+    cluster-id: 99
+    cluster-type: cluster_flow
+    defrag: yes

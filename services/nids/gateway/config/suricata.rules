@@ -1,0 +1,2 @@
+# Example rule
+alert tcp any any -> $HOME_NET any (msg:"Potential SSH Scan"; flow:to_server; flags:S; threshold:type threshold, track by_src, count 5, seconds 60; classtype:attempted-recon; sid:1000001; rev:1;)
