@@ -4,26 +4,39 @@
 :OUTPUT ACCEPT [0:0]
 
 # Reguły dla strefy żółtej (DMZ) (tabela 4)
--A FORWARD -s 10.1.0.0/24 -d 10.2.1.0/24 -p udp --dport 514 -j ACCEPT  # Syslog
--A FORWARD -s 10.1.0.0/24 -d 10.2.0.0/24 -p tcp -m multiport --dports 80,443 -j ACCEPT  # HTTP/HTTPS
--A FORWARD -s 10.1.0.0/24 -d 10.4.0.0/24 -j DROP  # Blokada do strefy czerwonej
--A FORWARD -s 10.1.0.0/24 -d 10.3.0.0/24 -j DROP  # Blokada do strefy zielonej
+# Syslog
+-A FORWARD -s 10.1.0.0/24 -d 10.2.1.0/24 -p udp --dport 514 -j ACCEPT  
+# HTTP/HTTPS
+-A FORWARD -s 10.1.0.0/24 -d 10.2.0.0/24 -p tcp -m multiport --dports 80,443 -j ACCEPT  
+# Blokada do strefy czerwonej
+-A FORWARD -s 10.1.0.0/24 -d 10.4.0.0/24 -j DROP 
+# Blokada do strefy zielonej 
+-A FORWARD -s 10.1.0.0/24 -d 10.3.0.0/24 -j DROP  
 
 # Reguły dla strefy niebieskiej (tabela 5)
--A FORWARD -s 10.2.0.0/24 -d 10.1.0.0/24 -p udp -m multiport --dports 53,514 -j ACCEPT  # DNS
--A FORWARD -s 10.2.0.0/24 -d 10.2.1.0/24 -p udp --dport 514 -j ACCEPT  # Syslog
--A FORWARD -s 10.2.0.0/24 -d 10.3.0.0/24 -p tcp -m multiport --dports 80,443 -j ACCEPT  # Usługi web
--A FORWARD -s 10.2.0.0/24 -d 10.4.0.0/24 -j DROP  # Blokada do strefy czerwonej
+# DNS
+-A FORWARD -s 10.2.0.0/24 -d 10.1.0.0/24 -p udp -m multiport --dports 53,514 -j ACCEPT  
+# Syslog
+-A FORWARD -s 10.2.0.0/24 -d 10.2.1.0/24 -p udp --dport 514 -j ACCEPT  
+# Usługi web
+-A FORWARD -s 10.2.0.0/24 -d 10.3.0.0/24 -p tcp -m multiport --dports 80,443 -j ACCEPT  
+# Blokada do strefy czerwonej
+-A FORWARD -s 10.2.0.0/24 -d 10.4.0.0/24 -j DROP  
 
 # Reguły dla Security Infrastructure (tabela 6)
--A FORWARD -s 10.2.1.0/24 -p tcp --dport 22 -j ACCEPT  # SSH administracyjny
--A FORWARD -s 10.2.1.0/24 -d 10.3.0.0/24 -p tcp --dport 8080 -j ACCEPT  # Wazuh agent
--A FORWARD -s 10.2.1.0/24 -d 10.1.0.0/24 -p tcp --dport 1514 -j ACCEPT  # HIDS komunikacja
--A FORWARD -s 10.2.1.0/24 -d 10.2.0.0/24 -p tcp --dport 1514 -j ACCEPT  # HIDS komunikacja
+# SSH administracyjny
+-A FORWARD -s 10.2.1.0/24 -p tcp --dport 22 -j ACCEPT  
+# Wazuh agent
+-A FORWARD -s 10.2.1.0/24 -d 10.3.0.0/24 -p tcp --dport 8080 -j ACCEPT  
+# HIDS komunikacja
+-A FORWARD -s 10.2.1.0/24 -d 10.1.0.0/24 -p tcp --dport 1514 -j ACCEPT  
+# HIDS komunikacja
+-A FORWARD -s 10.2.1.0/24 -d 10.2.0.0/24 -p tcp --dport 1514 -j ACCEPT  
 
 # Dostęp do skanera podatności z zielonej strefy
--A FORWARD -s 10.3.0.0/24 -d 10.2.0.50 -p tcp --dport 8834 -j ACCEPT  # Port Nessus UI
-
--A FORWARD -s 10.4.0.0/24 -d 10.2.0.50 -p tcp --dport 8834 -j ACCEPT  # Port Nessus UI
+# Port Nessus UI
+-A FORWARD -s 10.3.0.0/24 -d 10.2.0.50 -p tcp --dport 8834 -j ACCEPT  
+# Port Nessus UI
+-A FORWARD -s 10.4.0.0/24 -d 10.2.0.50 -p tcp --dport 8834 -j ACCEPT  
 
 COMMIT
