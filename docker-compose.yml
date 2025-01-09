@@ -41,8 +41,12 @@ services:
  # Main Firewall
  main_firewall:
    build: ./services/firewalls/main
+   privileged: true
+   sysctls:
+     - net.ipv4.ip_forward=1
    cap_add:
      - NET_ADMIN
+     - NET_RAW
    networks:
      gateway_dmz:
        ipv4_address: 10.1.0.3
@@ -56,8 +60,12 @@ services:
  # Gateway DMZ
  gateway_firewall:
    build: ./services/firewalls/gateway
+   privileged: true
+   sysctls:
+     - net.ipv4.ip_forward=1
    cap_add:
      - NET_ADMIN
+     - NET_RAW
    networks:
      gateway_dmz:
        ipv4_address: 10.1.0.2
@@ -106,8 +114,12 @@ services:
  # DMZ #2
  dmz2_firewall:
    build: ./services/firewalls/dmz2
+   privileged: true
+   sysctls:
+     - net.ipv4.ip_forward=1
    cap_add:
      - NET_ADMIN
+     - NET_RAW
    networks:
      dmz_2:
        ipv4_address: 10.2.2.2
@@ -127,8 +139,12 @@ services:
  # Security Infrastructure
  security_firewall:
    build: ./services/firewalls/security
+   privileged: true
+   sysctls:
+     - net.ipv4.ip_forward=1
    cap_add:
      - NET_ADMIN
+     - NET_RAW
    networks:
      security:
        ipv4_address: 10.2.1.2
@@ -207,8 +223,12 @@ services:
  # Red Server Host
  red_firewall:
    build: ./services/firewalls/red
+   privileged: true
+   sysctls:
+     - net.ipv4.ip_forward=1
    cap_add:
      - NET_ADMIN
+     - NET_RAW
    networks:
      red:
        ipv4_address: 10.4.0.2
@@ -240,7 +260,7 @@ services:
        ipv4_address: 10.4.0.101
 
  vulnerability_scanner:
-    build: ./services/vulnerability_scanner
+    build: ./services/security/vulnerability_scanner
     networks:
       security:
         ipv4_address: 10.2.1.50
