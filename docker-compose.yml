@@ -260,7 +260,16 @@ services:
        ipv4_address: 10.4.0.101
 
  vulnerability_scanner:
-    build: ./services/security/vulnerability_scanner
+    image: tenable/nessus:latest-ubuntu
+    environment:
+      - USERNAME=admin
+      - PASSWORD=admin
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    ports:
+      - "8834:8834"
     networks:
       security:
         ipv4_address: 10.2.1.50
