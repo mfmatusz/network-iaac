@@ -19,4 +19,13 @@
 # Pozostały ruch
 -A FORWARD -d 10.2.1.0/24 -j DROP  
 
+# Pingi do firewalla
+-A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+-A INPUT -p icmp --icmp-type echo-reply -j ACCEPT
+
+# Pingi między strefami
+-A FORWARD -p icmp --icmp-type echo-request -j ACCEPT
+-A FORWARD -p icmp --icmp-type echo-reply -j ACCEPT
+
+
 COMMIT

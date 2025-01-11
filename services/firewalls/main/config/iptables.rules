@@ -38,9 +38,18 @@
 # do zielonego
 -A FORWARD -s 10.2.1.50 -d 10.3.0.0/24 -p tcp --dport 8834 -j ACCEPT  
 #do czerwonego
--A FORWARD -s 10.2.1.50 -d 10.3.0.0/24 -p tcp --dport 8834 -j ACCEPT  
+-A FORWARD -s 10.2.1.50 -d 10.4.0.0/24 -p tcp --dport 8834 -j ACCEPT  
 # zwrotna
 # Nessus - odpowiedź zwrotna
 -A FORWARD -d 10.2.1.50 -p tcp --dport 8834 -j ACCEPT
+
+# Pingi do firewalla
+-A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+-A INPUT -p icmp --icmp-type echo-reply -j ACCEPT
+
+# Pingi między strefami
+-A FORWARD -p icmp --icmp-type echo-request -j ACCEPT
+-A FORWARD -p icmp --icmp-type echo-reply -j ACCEPT
+
 
 COMMIT

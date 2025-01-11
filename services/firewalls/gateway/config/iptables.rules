@@ -13,6 +13,15 @@
 # Domyślna polityka dla ruchu z internetu
 -A FORWARD -i eth0 -j DROP  
 
+# Pingi do firewalla
+-A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+-A INPUT -p icmp --icmp-type echo-reply -j ACCEPT
+
+# Pingi między strefami
+-A FORWARD -p icmp --icmp-type echo-request -j ACCEPT
+-A FORWARD -p icmp --icmp-type echo-reply -j ACCEPT
+
+
 # DMZ -> Internet
 # Ruch wychodzący
 -A FORWARD -i eth1 -o eth0 -j ACCEPT  

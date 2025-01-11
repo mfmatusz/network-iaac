@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install -y \
     iputils-ping \
     curl \
     wget \
+    traceroute \
     vim
 
 CMD ["tail", "-f", "/dev/null"]
