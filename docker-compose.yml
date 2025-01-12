@@ -175,12 +175,16 @@ services:
 
  service_x_host1:
    build: ./services/hosts/service_x
+   cap_add:
+     - NET_ADMIN
    networks:
      security:
        ipv4_address: 10.2.1.100
 
  service_x_host2:
    build: ./services/hosts/service_x
+   cap_add:
+     - NET_ADMIN
    networks:
      security:
        ipv4_address: 10.2.1.101
@@ -210,12 +214,16 @@ services:
 
  green_host1:
    build: ./services/hosts/green
+   cap_add:
+     - NET_ADMIN
    networks:
      green:
        ipv4_address: 10.3.0.100
 
  green_host2:
    build: ./services/hosts/green
+   cap_add:
+     - NET_ADMIN
    networks:
      green:
        ipv4_address: 10.3.0.101
@@ -249,12 +257,16 @@ services:
 
  red_host1:
    build: ./services/hosts/red
+   cap_add:
+     - NET_ADMIN
    networks:
      red:
        ipv4_address: 10.4.0.100
 
  red_host2:
    build: ./services/hosts/red
+   cap_add:
+     - NET_ADMIN
    networks:
      red:
        ipv4_address: 10.4.0.101
