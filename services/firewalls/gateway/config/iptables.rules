@@ -3,6 +3,14 @@
 :FORWARD DROP [0:0]
 :OUTPUT ACCEPT [0:0]
 
+# Pingi do firewalla
+-A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+-A INPUT -p icmp --icmp-type echo-reply -j ACCEPT
+
+# Pingi między strefami
+-A FORWARD -p icmp --icmp-type echo-request -j ACCEPT
+-A FORWARD -p icmp --icmp-type echo-reply -j ACCEPT
+
 # Internet -> DMZ (reguły z tabeli 2)
 # HTTPS dla usług web
 -A FORWARD -i eth0 -o eth1 -p tcp --dport 443 -j ACCEPT 
@@ -12,14 +20,6 @@
 -A FORWARD -i eth0 -o eth1 -p udp --dport 1194 -j ACCEPT  
 # Domyślna polityka dla ruchu z internetu
 -A FORWARD -i eth0 -j DROP  
-
-# Pingi do firewalla
--A INPUT -p icmp --icmp-type echo-request -j ACCEPT
--A INPUT -p icmp --icmp-type echo-reply -j ACCEPT
-
-# Pingi między strefami
--A FORWARD -p icmp --icmp-type echo-request -j ACCEPT
--A FORWARD -p icmp --icmp-type echo-reply -j ACCEPT
 
 
 # DMZ -> Internet

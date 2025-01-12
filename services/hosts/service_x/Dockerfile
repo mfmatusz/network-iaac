@@ -8,4 +8,12 @@ RUN apt-get update && apt-get install -y \
     traceroute \
     vim
 
-CMD ["tail", "-f", "/dev/null"]
+
+
+COPY entrypoint.sh /
+
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+# ENTRYPOINT [ "sh", "-c", "tail -f /dev/null" ]
+# ENTRYPOINT ["sh", "-c", "ip route del default && ip route add default via 10.3.0.3 && tail -f /dev/null"]
