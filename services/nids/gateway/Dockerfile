@@ -18,9 +18,11 @@ RUN mkdir -p /etc/suricata/rules
 
 COPY ./config/suricata.yml /etc/suricata/suricata.yaml
 COPY ./config/suricata.rules /etc/suricata/rules/suricata.rules
+COPY ./entrypoint.sh /entrypoint.sh
 
 RUN chmod 644 /etc/suricata/suricata.yaml && \
     chmod 644 /etc/suricata/rules/suricata.rules && \
-    chown -R root:root /etc/suricata
+    chown -R root:root /etc/suricata && \
+    chmod +x /entrypoint.sh
 
-CMD ["tail", "-f", "/dev/null"]
+ENTRYPOINT [ "/entrypoint.sh" ]

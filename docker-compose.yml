@@ -1,212 +1,232 @@
 version: '3.8'
 
 networks:
- # Gateway DMZ
- gateway_dmz:
-   ipam:
-     config:
-       - subnet: 10.1.0.0/24
+  # Gateway DMZ
+  gateway_dmz:
+    ipam:
+      config:
+        - subnet: 10.1.0.0/24
 
- # Service X 
- service_x:
-   ipam:
-     config:
-       - subnet: 10.2.0.0/24
+  # Service X 
+  service_x:
+    ipam:
+      config:
+        - subnet: 10.2.0.0/24
 
- # DMZ #2
- dmz_2:
-   ipam:
-     config:
-       - subnet: 10.2.2.0/24
+  # DMZ #2
+  dmz_2:
+    ipam:
+      config:
+        - subnet: 10.2.2.0/24
 
- # Security Infrastructure
- security:
-   ipam:
-     config:
-       - subnet: 10.2.1.0/24
+  # Security Infrastructure
+  security:
+    ipam:
+      config:
+        - subnet: 10.2.1.0/24
 
- # Green Server
- green:
-   ipam:
-     config:
-       - subnet: 10.3.0.0/24
+  # Green Server
+  green:
+    ipam:
+      config:
+        - subnet: 10.3.0.0/24
 
- # Red Server
- red:
-   ipam:
-     config:
-       - subnet: 10.4.0.0/24
+  # Red Server
+  red:
+    ipam:
+      config:
+        - subnet: 10.4.0.0/24
 
 services:
- # Main Firewall
- main_firewall:
-   build: ./services/firewalls/main
-   privileged: true
-   sysctls:
-     - net.ipv4.ip_forward=1
-   cap_add:
-     - NET_ADMIN
-     - NET_RAW
-   networks:
-     gateway_dmz:
-       ipv4_address: 10.1.0.3
-     service_x:
-       ipv4_address: 10.2.0.3
-     green:
-       ipv4_address: 10.3.0.3
-     red:
-       ipv4_address: 10.4.0.3
+  # Main Firewall
+  main_firewall:
+    build: ./services/firewalls/main
+    privileged: true
+    sysctls:
+      - net.ipv4.ip_forward=1
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      gateway_dmz:
+        ipv4_address: 10.1.0.3
+      service_x:
+        ipv4_address: 10.2.0.3
+      green:
+        ipv4_address: 10.3.0.3
+      red:
+        ipv4_address: 10.4.0.3
 
- # Gateway DMZ
- gateway_firewall:
-   build: ./services/firewalls/gateway
-   privileged: true
-   sysctls:
-     - net.ipv4.ip_forward=1
-   cap_add:
-     - NET_ADMIN
-     - NET_RAW
-   networks:
-     gateway_dmz:
-       ipv4_address: 10.1.0.2
+  # Gateway DMZ
+  gateway_firewall:
+    build: ./services/firewalls/gateway
+    privileged: true
+    sysctls:
+      - net.ipv4.ip_forward=1
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      gateway_dmz:
+        ipv4_address: 10.1.0.2
 
- gateway_nids:
-   build: ./services/nids/gateway
-   networks:
-     gateway_dmz:
-       ipv4_address: 10.1.0.20
+  gateway_nids:
+    build: ./services/nids/gateway
+    cap_add:
+      - NET_ADMIN
+    networks:
+      gateway_dmz:
+        ipv4_address: 10.1.0.20
 
- gateway_dns:
-   build: ./services/dns/gateway
-   networks:
-     gateway_dmz:
-       ipv4_address: 10.1.0.30
+  gateway_dns:
+    build: ./services/dns/gateway
+    cap_add:
+      - NET_ADMIN
+    networks:
+      gateway_dmz:
+        ipv4_address: 10.1.0.30
 
- service_x_dns:
-   build: ./services/dns/service_x
-   networks:
-     service_x:
-       ipv4_address: 10.2.0.30
+  service_x_dns:
+    build: ./services/dns/service_x
+    cap_add:
+      - NET_ADMIN
+    networks:
+      service_x:
+        ipv4_address: 10.2.0.30
 
- service_x_nids:
-   build: ./services/nids/service_x
-   networks:
-     service_x:
-       ipv4_address: 10.2.0.10
+  service_x_nids:
+    build: ./services/nids/service_x
+    cap_add:
+      - NET_ADMIN
+    networks:
+      service_x:
+        ipv4_address: 10.2.0.10
 
- # DMZ #2
- dmz2_firewall:
-   build: ./services/firewalls/dmz2
-   privileged: true
-   sysctls:
-     - net.ipv4.ip_forward=1
-   cap_add:
-     - NET_ADMIN
-     - NET_RAW
-   networks:
-     dmz_2:
-       ipv4_address: 10.2.2.2
+  # DMZ #2
+  dmz2_firewall:
+    build: ./services/firewalls/dmz2
+    privileged: true
+    sysctls:
+      - net.ipv4.ip_forward=1
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      dmz_2:
+        ipv4_address: 10.2.2.2
+      service_x:
+        ipv4_address: 10.2.0.5
 
- vpn_controller:
-   build: ./services/vpn_controller
-   networks:
-     dmz_2:
-       ipv4_address: 10.2.2.50
+  vpn_controller:
+    build: ./services/vpn_controller
+    cap_add:
+      - NET_ADMIN
+    networks:
+      dmz_2:
+        ipv4_address: 10.2.2.50
 
- # Security Infrastructure
- security_firewall:
-   build: ./services/firewalls/security
-   privileged: true
-   sysctls:
-     - net.ipv4.ip_forward=1
-   cap_add:
-     - NET_ADMIN
-     - NET_RAW
-   networks:
-     security:
-       ipv4_address: 10.2.1.2
+  # Security Infrastructure
+  security_firewall:
+    build: ./services/firewalls/security
+    privileged: true
+    sysctls:
+      - net.ipv4.ip_forward=1
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      security:
+        ipv4_address: 10.2.1.2
+      service_x:
+        ipv4_address: 10.2.0.4
 
- edr:
-   build: ./services/security/edr
-   networks:
-     security:
-       ipv4_address: 10.2.1.10
+  edr:
+    build: ./services/security/edr
+    cap_add:
+      - NET_ADMIN
+    networks:
+      security:
+        ipv4_address: 10.2.1.10
 
- siem:
-   build: ./services/security/siem
-   networks:
-     security:
-       ipv4_address: 10.2.1.30
+  siem:
+    build: ./services/security/siem
+    cap_add:
+      - NET_ADMIN
+    networks:
+      security:
+        ipv4_address: 10.2.1.30
 
- log_collector:
-   build: ./services/security/log_collector
-   networks:
-     security:
-       ipv4_address: 10.2.1.20
+  log_collector:
+    build: ./services/security/log_collector
+    cap_add:
+      - NET_ADMIN
+    networks:
+      security:
+        ipv4_address: 10.2.1.20
 
- service_x_host1:
-   build: ./services/hosts/service_x
-   cap_add:
-     - NET_ADMIN
-   networks:
-     service_x:
-       ipv4_address: 10.2.0.100
+  service_x_host1:
+    build: ./services/hosts/service_x
+    cap_add:
+      - NET_ADMIN
+    networks:
+      service_x:
+        ipv4_address: 10.2.0.100
 
- service_x_host2:
-   build: ./services/hosts/service_x
-   cap_add:
-     - NET_ADMIN
-   networks:
-     service_x:
-       ipv4_address: 10.2.0.101
+  service_x_host2:
+    build: ./services/hosts/service_x
+    cap_add:
+      - NET_ADMIN
+    networks:
+      service_x:
+        ipv4_address: 10.2.0.101
 
- green_host1:
-   build: ./services/hosts/green
-   cap_add:
-     - NET_ADMIN
-   networks:
-     green:
-       ipv4_address: 10.3.0.100
+  green_host1:
+    build: ./services/hosts/green
+    cap_add:
+      - NET_ADMIN
+    networks:
+      green:
+        ipv4_address: 10.3.0.100
 
- green_host2:
-   build: ./services/hosts/green
-   cap_add:
-     - NET_ADMIN
-   networks:
-     green:
-       ipv4_address: 10.3.0.101
+  green_host2:
+    build: ./services/hosts/green
+    cap_add:
+      - NET_ADMIN
+    networks:
+      green:
+        ipv4_address: 10.3.0.101
 
- # Red Server Host
- red_firewall:
-   build: ./services/firewalls/red
-   privileged: true
-   sysctls:
-     - net.ipv4.ip_forward=1
-   cap_add:
-     - NET_ADMIN
-     - NET_RAW
-   networks:
-     red:
-       ipv4_address: 10.4.0.2
+  # Red Server Host
+  red_firewall:
+    build: ./services/firewalls/red
+    privileged: true
+    sysctls:
+      - net.ipv4.ip_forward=1
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      red:
+        ipv4_address: 10.4.0.2
 
- red_host1:
-   build: ./services/hosts/red
-   cap_add:
-     - NET_ADMIN
-   networks:
-     red:
-       ipv4_address: 10.4.0.100
+  red_host1:
+    build: ./services/hosts/red
+    cap_add:
+      - NET_ADMIN
+    networks:
+      red:
+        ipv4_address: 10.4.0.100
 
- red_host2:
-   build: ./services/hosts/red
-   cap_add:
-     - NET_ADMIN
-   networks:
-     red:
-       ipv4_address: 10.4.0.101
+  red_host2:
+    build: ./services/hosts/red
+    cap_add:
+      - NET_ADMIN
+    networks:
+      red:
+        ipv4_address: 10.4.0.101
 
- vulnerability_scanner:
-    image: tenable/nessus:latest-ubuntu
+  vulnerability_scanner:
+    build: ./services/security/vulnerability_scanner
     environment:
       - USERNAME=admin
       - PASSWORD=admin
@@ -219,4 +239,3 @@ services:
     networks:
       security:
         ipv4_address: 10.2.1.50
-    

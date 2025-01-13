@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM tenable/nessus:latest-ubuntu
 RUN apt-get update && apt-get install -y \
     openvpn \
     easy-rsa \
@@ -8,4 +8,6 @@ RUN apt-get update && apt-get install -y \
 
 COPY config/ /etc/openvpn/
 
-CMD ["tail", "-f", "/dev/null"]
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
