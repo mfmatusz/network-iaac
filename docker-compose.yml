@@ -36,6 +36,11 @@ networks:
     ipam:
       config:
         - subnet: 10.4.0.0/24
+  # Remote Office
+  remote_office:
+    ipam:
+      config:
+        - subnet: 192.168.0.0/24
 
 services:
   # Main Firewall
@@ -140,6 +145,19 @@ services:
       service_x:
         ipv4_address: 10.2.0.4
 
+  # Remote Office
+  ro_firewall:
+    build: ./services/firewalls/ro
+    privileged: true
+    sysctls:
+      - net.ipv4.ip_forward=1
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      remote_office:
+        ipv4_address: 192.168.0.2
+
   edr:
     build: ./services/security/edr
     cap_add:
@@ -240,6 +258,14 @@ services:
     networks:
       dmz_2:
         ipv4_address: 10.2.2.101
+  
+  ro_host1:
+    build: ./services/hosts/remote_office
+    cap_add:
+      - NET_ADMIN
+    networks:
+      remote_office:
+        ipv4_address: 192.168.0.100
 
   vulnerability_scanner:
     build: ./services/security/vulnerability_scanner

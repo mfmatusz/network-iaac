@@ -21,9 +21,9 @@
 # Elasticsearch
 -A FORWARD -s 10.0.0.0/8 -d 10.2.1.30 -p tcp --dport 9200 -j ACCEPT
 # Nessus
--A FORWARD -s 10.2.1.50 -p tcp --dport 8834 -j ACCEPT  
+-A FORWARD -s 10.2.1.50 -j ACCEPT  
 # Nessus odpowiedz zwrotna
--A FORWARD -d 10.2.1.50 -p tcp --dport 8834 -j ACCEPT
+-A FORWARD -d 10.2.1.50 -j ACCEPT
 # Pozostały ruch
 -A FORWARD -d 10.2.1.0/24 -j DROP  
 

@@ -18,6 +18,12 @@
 -A FORWARD -s 10.4.0.0/24 -d 10.2.1.0/24 -p udp --dport 514 -j ACCEPT  
 # DNS
 -A FORWARD -s 10.4.0.0/24 -d 10.1.0.0/24 -p udp -m multiport --dports 53,514 -j ACCEPT  
+
+# Nessus
+-A FORWARD -s 10.2.1.50 -j ACCEPT  
+# Nessus odpowiedz zwrotna
+-A FORWARD -d 10.2.1.50 -j ACCEPT
+
 # Pozostały ruch
 -A FORWARD -d 10.4.0.0/24 -j DROP  
 
