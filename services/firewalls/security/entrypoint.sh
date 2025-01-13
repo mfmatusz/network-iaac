@@ -13,7 +13,5 @@ ip route add 10.1.0.0/24 via 10.2.0.3 dev eth1
 ip route add 10.2.2.0/24 via 10.2.0.5 dev eth1
 # do green (przez main)
 ip route add 10.3.0.0/24 via 10.2.0.3 dev eth1
-# do service_X (przez main)
-ip route add 10.2.0.0/24 via 10.2.0.3 dev eth1
 
 tail -f /dev/null

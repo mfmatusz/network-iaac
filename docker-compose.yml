@@ -225,6 +225,22 @@ services:
       red:
         ipv4_address: 10.4.0.101
 
+  dmz2_host1:
+    build: ./services/hosts/dmz2
+    cap_add:
+      - NET_ADMIN
+    networks:
+      dmz_2:
+        ipv4_address: 10.2.2.100
+
+  dmz2_host2:
+    build: ./services/hosts/dmz2
+    cap_add:
+      - NET_ADMIN
+    networks:
+      dmz_2:
+        ipv4_address: 10.2.2.101
+
   vulnerability_scanner:
     build: ./services/security/vulnerability_scanner
     environment:
