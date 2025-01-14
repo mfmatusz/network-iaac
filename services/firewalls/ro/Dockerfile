@@ -11,6 +11,8 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 COPY config/iptables.rules /etc/iptables/rules
+COPY config/ipsec.conf /etc/ipsec.conf
+COPY config/ipsec.secrets /etc/ipsec.secrets
 COPY entrypoint.sh /
 
 RUN chmod +x /entrypoint.sh
