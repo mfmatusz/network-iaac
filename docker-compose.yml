@@ -36,6 +36,7 @@ networks:
     ipam:
       config:
         - subnet: 10.4.0.0/24
+
   # Remote Office
   remote_office:
     ipam:
@@ -45,7 +46,9 @@ networks:
 services:
   # Main Firewall
   main_firewall:
-    build: ./services/firewalls/main
+    build:
+      context: ./services/firewalls/main
+      network: host
     privileged: true
     sysctls:
       - net.ipv4.ip_forward=1
@@ -64,7 +67,9 @@ services:
 
   # Gateway DMZ
   gateway_firewall:
-    build: ./services/firewalls/gateway
+    build:
+      context: ./services/firewalls/gateway
+      network: host
     privileged: true
     sysctls:
       - net.ipv4.ip_forward=1
@@ -76,7 +81,9 @@ services:
         ipv4_address: 10.1.0.2
 
   gateway_nids:
-    build: ./services/nids/gateway
+    build:
+      context: ./services/nids/gateway
+      network: host
     cap_add:
       - NET_ADMIN
     networks:
@@ -84,7 +91,9 @@ services:
         ipv4_address: 10.1.0.20
 
   gateway_dns:
-    build: ./services/dns/gateway
+    build:
+      context: ./services/dns/gateway
+      network: host
     cap_add:
       - NET_ADMIN
     networks:
@@ -92,7 +101,9 @@ services:
         ipv4_address: 10.1.0.30
 
   service_x_dns:
-    build: ./services/dns/service_x
+    build:
+      context: ./services/dns/service_x
+      network: host
     cap_add:
       - NET_ADMIN
     networks:
@@ -100,7 +111,9 @@ services:
         ipv4_address: 10.2.0.30
 
   service_x_nids:
-    build: ./services/nids/service_x
+    build:
+      context: ./services/nids/service_x
+      network: host
     cap_add:
       - NET_ADMIN
     networks:
@@ -109,7 +122,9 @@ services:
 
   # DMZ #2
   dmz2_firewall:
-    build: ./services/firewalls/dmz2
+    build:
+      context: ./services/firewalls/dmz2
+      network: host
     privileged: true
     sysctls:
       - net.ipv4.ip_forward=1
@@ -123,7 +138,9 @@ services:
         ipv4_address: 10.2.0.5
 
   vpn_controller:
-    build: ./services/vpn_controller
+    build:
+      context: ./services/vpn_controller
+      network: host
     cap_add:
       - NET_ADMIN
     networks:
@@ -132,7 +149,9 @@ services:
 
   # Security Infrastructure
   security_firewall:
-    build: ./services/firewalls/security
+    build:
+      context: ./services/firewalls/security
+      network: host
     privileged: true
     sysctls:
       - net.ipv4.ip_forward=1
@@ -147,7 +166,9 @@ services:
 
   # Remote Office
   ro_firewall:
-    build: ./services/firewalls/ro
+    build:
+      context: ./services/firewalls/ro
+      network: host
     privileged: true
     sysctls:
       - net.ipv4.ip_forward=1
@@ -159,7 +180,9 @@ services:
         ipv4_address: 192.168.0.2
 
   edr:
-    build: ./services/security/edr
+    build:
+      context: ./services/security/edr
+      network: host
     cap_add:
       - NET_ADMIN
     networks:
@@ -167,7 +190,9 @@ services:
         ipv4_address: 10.2.1.10
 
   siem:
-    build: ./services/security/siem
+    build:
+      context: ./services/security/siem
+      network: host
     cap_add:
       - NET_ADMIN
     networks:
@@ -175,7 +200,9 @@ services:
         ipv4_address: 10.2.1.30
 
   log_collector:
-    build: ./services/security/log_collector
+    build:
+      context: ./services/security/log_collector
+      network: host
     cap_add:
       - NET_ADMIN
     networks:
@@ -183,7 +210,9 @@ services:
         ipv4_address: 10.2.1.20
 
   service_x_host1:
-    build: ./services/hosts/service_x
+    build:
+      context: ./services/hosts/service_x
+      network: host
     cap_add:
       - NET_ADMIN
     networks:
@@ -191,7 +220,9 @@ services:
         ipv4_address: 10.2.0.100
 
   service_x_host2:
-    build: ./services/hosts/service_x
+    build:
+      context: ./services/hosts/service_x
+      network: host
     cap_add:
       - NET_ADMIN
     networks:
@@ -199,7 +230,9 @@ services:
         ipv4_address: 10.2.0.101
 
   green_host1:
-    build: ./services/hosts/green
+    build:
+      context: ./services/hosts/green
+      network: host
     cap_add:
       - NET_ADMIN
     networks:
@@ -207,7 +240,9 @@ services:
         ipv4_address: 10.3.0.100
 
   green_host2:
-    build: ./services/hosts/green
+    build:
+      context: ./services/hosts/green
+      network: host
     cap_add:
       - NET_ADMIN
     networks:
@@ -216,7 +251,9 @@ services:
 
   # Red Server Host
   red_firewall:
-    build: ./services/firewalls/red
+    build:
+      context: ./services/firewalls/red
+      network: host
     privileged: true
     sysctls:
       - net.ipv4.ip_forward=1
@@ -228,7 +265,9 @@ services:
         ipv4_address: 10.4.0.2
 
   red_host1:
-    build: ./services/hosts/red
+    build:
+      context: ./services/hosts/red
+      network: host
     cap_add:
       - NET_ADMIN
     networks:
@@ -236,7 +275,9 @@ services:
         ipv4_address: 10.4.0.100
 
   red_host2:
-    build: ./services/hosts/red
+    build:
+      context: ./services/hosts/red
+      network: host
     cap_add:
       - NET_ADMIN
     networks:
@@ -244,7 +285,9 @@ services:
         ipv4_address: 10.4.0.101
 
   dmz2_host1:
-    build: ./services/hosts/dmz2
+    build:
+      context: ./services/hosts/dmz2
+      network: host
     cap_add:
       - NET_ADMIN
     networks:
@@ -252,15 +295,19 @@ services:
         ipv4_address: 10.2.2.100
 
   dmz2_host2:
-    build: ./services/hosts/dmz2
+    build:
+      context: ./services/hosts/dmz2
+      network: host
     cap_add:
       - NET_ADMIN
     networks:
       dmz_2:
         ipv4_address: 10.2.2.101
-  
+
   ro_host1:
-    build: ./services/hosts/remote_office
+    build:
+      context: ./services/hosts/remote_office
+      network: host
     cap_add:
       - NET_ADMIN
     networks:
@@ -268,7 +315,9 @@ services:
         ipv4_address: 192.168.0.100
 
   vulnerability_scanner:
-    build: ./services/security/vulnerability_scanner
+    build:
+      context: ./services/security/vulnerability_scanner
+      network: host
     environment:
       - USERNAME=admin
       - PASSWORD=admin

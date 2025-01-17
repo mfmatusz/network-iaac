@@ -2,10 +2,10 @@
 
 echo 1 > /proc/sys/net/ipv4/ip_forward
 iptables-restore < /etc/iptables/rules
-ipsec start
+ipsec start --conf /etc/ipsec.d/ipsec.conf --debug
 
-ip route del default && ip route add default via 10.1.0.2
-ip route add 192.168.0.0/24 via 10.1.0.2
+ip route del default && ip route add default via 10.1.0.1
+ip route add 192.168.0.0/24 via 10.1.0.1
 ip route add 10.2.0.0/24 via 10.1.0.3
 ip route add 10.2.1.0/24 via 10.1.0.3
 ip route add 10.2.2.0/24 via 10.1.0.3

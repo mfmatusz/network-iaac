@@ -1,0 +1,18 @@
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+
+# VPN
+-A INPUT -p udp --dport 500 -j ACCEPT
+-A INPUT -p udp --dport 4500 -j ACCEPT
+-A INPUT -p esp -j ACCEPT
+-A OUTPUT -p udp --dport 500 -j ACCEPT
+-A OUTPUT -p udp --dport 4500 -j ACCEPT
+-A OUTPUT -p esp -j ACCEPT
+
+# Pingi do firewalla
+-A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+-A INPUT -p icmp --icmp-type echo-reply -j ACCEPT
+
+COMMIT
